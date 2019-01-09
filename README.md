@@ -22,7 +22,7 @@ echo -n "apppassword" \
 
 ### query filters
 
-Query filters expected in the form of `{name}:{value}` arguments. Multi work values should be quoted.
+Query filters expected in the form of `{name}:{value}` arguments. Multi-word values should be quoted.
 
 Some example imap search filters are as follows
 
