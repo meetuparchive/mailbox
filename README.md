@@ -1,4 +1,4 @@
-# mailbox
+# mailbox [![Build Status](https://travis-ci.org/meetup/mailbox.svg?branch=master)](https://travis-ci.org/meetup/mailbox)
 
 > ✉️ 💌 ✉️ imap query client that speaks json
 
