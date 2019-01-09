@@ -14,7 +14,7 @@ The default imap domain is Google's.
 It is recommended to pass in your [Mail app password](https://support.google.com/accounts/answer/185833?hl=en) from stdin.
 
 ```sh
-echo -e "apppassword" | cargo run -p mailbox-cli -- -u "you@mail.com" subject:lotto
+echo -e "apppassword" | cargo run -p mailbox-cli -- -u "you@gmail.com" subject:lotto
 ```
 
 Meetup, Inc 2019
