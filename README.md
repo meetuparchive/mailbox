@@ -17,7 +17,7 @@ It is recommended to pass in your [Mail app password](https://support.google.com
 echo -e "apppassword" | cargo run -p mailbox-cli -- -u "you@gmail.com" subject:lotto
 ```
 
-### Query filters
+### query filters
 
 Query filters expected in the form of `{name}:{value}` arguments. Multi work values should be quoted.
 
