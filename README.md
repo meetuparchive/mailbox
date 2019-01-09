@@ -7,7 +7,7 @@
 This is a [rustlang](https://www.rust-lang.org/en-US/) application.
 Go grab yourself a copy with [rustup](https://rustup.rs/).
 
-## usage
+## 🤸 usage
 
 The default imap domain is Google's. 
 
