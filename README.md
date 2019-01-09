@@ -38,4 +38,13 @@ TO "string" - match messages with "string" in the To:
 UNKEYWORD "string" - match messages that do not have the keyword "string"
 ```
 
+### template output
+
+You can optional template the array of json messages with a handlebars template.
+
+```sh
+echo -e "apppassword" | cargo run -p mailbox-cli -- -u "you@gmail.com" subject:lotto -t '{{#each .}}{{subject}}
+{{/each}}
+```
+
 Meetup, Inc 2019
