@@ -11,7 +11,7 @@ Go grab yourself a copy with [rustup](https://rustup.rs/).
 
 The default imap domain is Google's. 
 
-It is recommended to pass in your [Mail app password](https://support.google.com/accounts/answer/185833?hl=en) from stdin.
+It is recommended (and the default) to pass in your [Mail app password](https://support.google.com/accounts/answer/185833?hl=en) from stdin.
 
 ```sh
 echo -n "apppassword" \
