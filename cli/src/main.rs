@@ -36,13 +36,33 @@ where
 struct Options {
     #[structopt(short = "u", long = "username", help = "Username to authenticate as")]
     username: String,
-    #[structopt(short = "p", long = "password", default_value = "-", help = "Password to authenticate with")]
+    #[structopt(
+        short = "p",
+        long = "password",
+        default_value = "-",
+        help = "Password to authenticate with"
+    )]
     password: String,
-    #[structopt(short = "d", long = "domain", default_value = "imap.gmail.com", help = "IMap server domain")]
+    #[structopt(
+        short = "d",
+        long = "domain",
+        default_value = "imap.gmail.com",
+        help = "IMap server domain"
+    )]
     domain: String,
-    #[structopt(short = "P", long = "port", default_value = "993", help = "IMap server port")]
+    #[structopt(
+        short = "P",
+        long = "port",
+        default_value = "993",
+        help = "IMap server port"
+    )]
     port: u16,
-    #[structopt(short = "b", long = "box", default_value = "INBOX", help = "IMap mailbox name")]
+    #[structopt(
+        short = "b",
+        long = "box",
+        default_value = "INBOX",
+        help = "IMap mailbox name"
+    )]
     mailbox: String,
     #[structopt(
         short = "w",

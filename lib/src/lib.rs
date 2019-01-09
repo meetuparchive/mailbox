@@ -1,4 +1,4 @@
-use mailparse::parse_mail;
+use mailparse::{parse_mail, ParsedMail};
 use native_tls::TlsConnector;
 use serde::Serialize;
 use std::{collections::HashMap, time::SystemTime};
@@ -31,6 +31,53 @@ pub struct Part {
     pub body: Option<String>,
 }
 
+impl From<ParsedMail<'_>> for Message {
+    fn from(parsed: ParsedMail) -> Self {
+        let body = if parsed.ctype.mimetype.starts_with("multipart/") {
+            parsed
+                .subparts
+                .into_iter()
+                .fold(Vec::new(), |mut result, part| {
+                    let body = if part.ctype.mimetype.starts_with("text/") {
+                        part.get_body().ok()
+                    } else {
+                        part.get_body_raw().ok().map(|b| base64::encode(&b))
+                    };
+                    result.push(Part {
+                        content_type: part.ctype.mimetype,
+                        body,
+                    });
+                    result
+                })
+        } else {
+            let body = if parsed.ctype.mimetype.starts_with("text/") {
+                parsed.get_body().ok()
+            } else {
+                parsed.get_body_raw().ok().map(|b| base64::encode(&b))
+            };
+            vec![Part {
+                content_type: parsed.ctype.mimetype,
+                body,
+            }]
+        };
+        let headers = parsed
+            .headers
+            .into_iter()
+            .fold(HashMap::new(), |mut result, header| {
+                result.insert(header.get_key().unwrap(), header.get_value().unwrap());
+                result
+            });
+        Message {
+            headers: headers.clone(),
+            subject: headers.get("Subject").cloned(),
+            date: headers.get("Date").cloned(),
+            to: headers.get("To").cloned(),
+            from: headers.get("From").cloned(),
+            body,
+        }
+    }
+}
+
 impl Client {
     pub fn find<M>(
         &self,
@@ -55,61 +102,15 @@ impl Client {
         for s in session.uid_search(search)? {
             if let Some(fetch) = session.uid_fetch(s.to_string(), "RFC822")?.iter().next() {
                 let parsed = parse_mail(fetch.body().unwrap_or_default()).unwrap();
-
-                let body = if parsed.ctype.mimetype.starts_with("multipart/") {
-                    parsed
-                        .subparts
-                        .into_iter()
-                        .fold(Vec::new(), |mut result, part| {
-                            let body = if part.ctype.mimetype.starts_with("text/") {
-                                part.get_body().ok()
-                            } else {
-                                part.get_body_raw().ok().map(|b| base64::encode(&b))
-                            };
-                            result.push(Part {
-                                content_type: part.ctype.mimetype,
-                                body,
-                            });
-                            result
-                        })
-                } else {
-                    let body = if parsed.ctype.mimetype.starts_with("text/") {
-                        parsed.get_body().ok()
-                    } else {
-                        parsed.get_body_raw().ok().map(|b| base64::encode(&b))
-                    };
-                    vec![Part {
-                        content_type: parsed.ctype.mimetype,
-                        body,
-                    }]
-                };
-                let headers =
-                    parsed
-                        .headers
-                        .into_iter()
-                        .fold(HashMap::new(), |mut result, header| {
-                            result.insert(header.get_key().unwrap(), header.get_value().unwrap());
-                            result
-                        });
-                messages.push(Message {
-                    headers: headers.clone(),
-                    subject: headers.get("Subject").cloned(),
-                    date: headers.get("Date").cloned(),
-                    to: headers.get("To").cloned(),
-                    from: headers.get("From").cloned(),
-                    body,
-                })
+                messages.push(Message::from(parsed));
             }
         }
         session.close()?;
         if messages.is_empty() {
             if let Some(deadline) = wait {
                 if SystemTime::now() < deadline {
-                    return self.find(
-                        mailbox,
-                        query,
-                        wait
-                    );
+                    // todo: consider doing this in one "session"
+                    return self.find(mailbox, query, wait);
                 }
             }
         }
