@@ -14,7 +14,10 @@ The default imap domain is Google's.
 It is recommended to pass in your [Mail app password](https://support.google.com/accounts/answer/185833?hl=en) from stdin.
 
 ```sh
-echo -n "apppassword" | cargo run -p mailbox-cli -- -u "you@gmail.com" subject:lotto since:1-jan-2019
+echo -n "apppassword" \
+| cargo run -p mailbox-cli -- \
+  -u "you@gmail.com" \
+  subject:lotto since:1-jan-2019
 ```
 
 ### query filters
@@ -43,7 +46,11 @@ UNKEYWORD "string" - match messages that do not have the keyword "string"
 You can optional template the array of json messages with a handlebars template.
 
 ```sh
-echo -n "apppassword" | cargo run -p mailbox-cli -- -u "you@gmail.com" subject:lotto since:1-jan-2019 -t '{{#each .}}{{subject}}
+echo -n "apppassword" \
+ | cargo run -p mailbox-cli -- \
+   -u "you@gmail.com" \
+   subject:lotto since:1-jan-2019 \
+   -t '{{#each .}}{{subject}}
 {{/each}}
 ```
 
