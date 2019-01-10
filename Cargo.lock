@@ -485,7 +485,7 @@ dependencies = [
 
 [[package]]
 name = "mailbox"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "base64 0.10.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -500,7 +500,7 @@ dependencies = [
 
 [[package]]
 name = "mailbox-cli"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "chrono 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono-english 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -508,7 +508,7 @@ dependencies = [
  "env_logger 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "handlebars 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "humantime 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "mailbox 0.1.0",
+ "mailbox 0.0.0",
  "serde_json 1.0.34 (registry+https://github.com/rust-lang/crates.io-index)",
  "structopt 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "syntect 3.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
