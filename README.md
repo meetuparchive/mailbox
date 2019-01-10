@@ -30,7 +30,7 @@ Query filters expected in the form of `{name}:{value}` arguments. Multi-word val
 Some example imap search filters are as follows.
 
 ```
-# require argument
+# requires argument
 BCC "string" - match messages with "string" in the Bcc: field
 BEFORE "date" - match messages with Date: before "date"
 BODY "string" - match messages with "string" in the body of the message
