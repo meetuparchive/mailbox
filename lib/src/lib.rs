@@ -2,6 +2,7 @@ use mailparse::{parse_mail, ParsedMail};
 use native_tls::TlsConnector;
 use serde::Serialize;
 use std::{collections::HashMap, time::SystemTime};
+use log::debug;
 
 mod error;
 pub use crate::error::Error;
@@ -95,9 +96,10 @@ impl Client {
 
         let search = query
             .into_iter()
-            .map(|(k, v)| format!("{} {}", k, v))
+            .map(|(k, v)| format!("{} {}", k, v).trim().to_owned())
             .collect::<Vec<_>>()
             .join(" ");
+        debug!("search query '{}'", search);
         let mut messages = vec![];
         for s in session.uid_search(search)? {
             if let Some(fetch) = session.uid_fetch(s.to_string(), "RFC822")?.iter().next() {
@@ -109,6 +111,7 @@ impl Client {
         if messages.is_empty() {
             if let Some(deadline) = wait {
                 if SystemTime::now() < deadline {
+                    eprintln!("retrying...");
                     // todo: consider doing this in one "session"
                     return self.find(mailbox, query, wait);
                 }

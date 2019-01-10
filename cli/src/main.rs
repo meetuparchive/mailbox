@@ -103,6 +103,7 @@ where
 }
 
 fn main() {
+    env_logger::init();
     let options = Options::from_args();
     let client = Client {
         username: options.username,
