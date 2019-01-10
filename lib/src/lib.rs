@@ -2,7 +2,11 @@ use log::debug;
 use mailparse::{parse_mail, ParsedMail};
 use native_tls::TlsConnector;
 use serde::Serialize;
-use std::{collections::HashMap, time::SystemTime};
+use std::{
+    collections::HashMap,
+    io::{Read, Write},
+    time::SystemTime,
+};
 
 mod error;
 pub use crate::error::Error;
@@ -88,7 +92,7 @@ impl Client {
     ) -> Result<Vec<Message>, Error>
     where
         Q: AsRef<str>,
-        T: std::io::Read + std::io::Write,
+        T: Read + Write,
     {
         let messages = session
             .uid_search(query.as_ref())?
@@ -111,10 +115,18 @@ impl Client {
         Ok(messages)
     }
 
+    fn fmt_query(query: &[(String, String)]) -> String {
+        query
+            .into_iter()
+            .map(|(k, v)| format!("{} {}", k, v).trim().to_owned())
+            .collect::<Vec<_>>()
+            .join(" ")
+    }
+
     pub fn find<M>(
         &self,
         mailbox: M,
-        query: &Vec<(String, String)>,
+        query: &[(String, String)],
         wait: Option<SystemTime>,
     ) -> Result<Vec<Message>, Error>
     where
@@ -125,15 +137,23 @@ impl Client {
         let mut session = client.login(&self.username, &self.password)?;
         session.select(mailbox.as_ref())?;
 
-        let formatted = query
-            .into_iter()
-            .map(|(k, v)| format!("{} {}", k, v).trim().to_owned())
-            .collect::<Vec<_>>()
-            .join(" ");
+        let formatted = Self::fmt_query(query);
         debug!("search query '{}'", formatted);
         let messages = self.search(&mut session, formatted, wait)?;
 
         session.close()?;
         Ok(messages)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Client;
+    #[test]
+    fn formats_query() {
+        assert_eq!(
+            Client::fmt_query(&[("foo".into(), "bar".into()), ("baz".into(), "".into())]),
+            "foo bar baz"
+        )
     }
 }
