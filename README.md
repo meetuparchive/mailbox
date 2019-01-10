@@ -9,7 +9,7 @@ Go grab yourself a copy with [rustup](https://rustup.rs/).
 
 ## 🤸 usage
 
-The default imap domain is Google's. 
+The default imap domain is Google's.
 
 It is recommended (and the default) to pass in your [Mail app password](https://support.google.com/accounts/answer/185833?hl=en) from stdin.
 
@@ -43,15 +43,15 @@ UNKEYWORD "string" - match messages that do not have the keyword "string"
 
 ### template output
 
-You can optional template the array of json messages with a handlebars template.
+You can optionally template the array of returned json messages using [handlebars template syntax](https://handlebarsjs.com/).
 
 ```sh
 echo -n "apppassword" \
  | cargo run -p mailbox-cli -- \
    -u "you@gmail.com" \
-   subject:lotto since:1-jan-2019 \
    -t '{{#each .}}{{subject}}
-{{/each}}
+{{/each}}' \
+   subject:lotto since:1-jan-2019
 ```
 
 Meetup, Inc 2019
