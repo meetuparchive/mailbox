@@ -11,7 +11,7 @@ keywords = [
 ]
 
 [[bin]]
-name = "maildap"
+name = "mailbox"
 path = "src/main.rs"
 
 [dependencies]
