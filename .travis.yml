@@ -35,7 +35,6 @@ DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
     file: mailbox-$TRAVIS_TAG-$OS-$ARCH.tar.gz
     skip_cleanup: true
     on:
-      branch: master
       tags: true
 
 matrix:
