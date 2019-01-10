@@ -1,13 +1,14 @@
 use failure::Fail;
 use imap::error::Error as IMapError;
 use mailparse::MailParseError;
-use native_tls::TlsStream;
+use native_tls::{Error as TlsError, TlsStream};
 use std::{error::Error as StdError, fmt, net::TcpStream};
 
 #[derive(Fail, Debug)]
 pub enum Error {
     IMap(IMapError),
     Parse(MailParseError),
+    Tls(TlsError),
 }
 
 impl fmt::Display for Error {
@@ -18,6 +19,7 @@ impl fmt::Display for Error {
         match self {
             Error::IMap(e) => write!(f, "{}", e.description()),
             Error::Parse(e) => write!(f, "{}", e.description()),
+            Error::Tls(e) => write!(f, "{}", e.description()),
         }
     }
 }
@@ -38,5 +40,11 @@ impl From<IMapError> for Error {
 impl From<MailParseError> for Error {
     fn from(e: MailParseError) -> Self {
         Error::Parse(e)
+    }
+}
+
+impl From<TlsError> for Error {
+    fn from(e: TlsError) -> Self {
+        Error::Tls(e)
     }
 }
