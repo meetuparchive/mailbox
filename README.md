@@ -25,11 +25,12 @@ search was successful or not.
 
 ### query filters
 
-Query filters expected in the form of `{name}:{value}` arguments. Multi-word values should be quoted.
+Query filters expected in the form of `{name}:{value}` arguments. Multi-word values should be quoted. Filters that don't require arguments are are expected in the form `{name}:`.
 
-Some example imap search filters are as follows
+Some example imap search filters are as follows.
 
 ```
+# require argument
 BCC "string" - match messages with "string" in the Bcc: field
 BEFORE "date" - match messages with Date: before "date"
 BODY "string" - match messages with "string" in the body of the message
@@ -42,6 +43,20 @@ SUBJECT "string" - match messages with "string" in the Subject:
 TEXT "string" - match messages with text "string"
 TO "string" - match messages with "string" in the To:
 UNKEYWORD "string" - match messages that do not have the keyword "string"
+
+# no arguments
+ALL - return all messages matching the rest of the criteria
+DELETED - match deleted messages
+FLAGGED - match messages with the \\FLAGGED (sometimes referred to as Important or Urgent) flag set
+NEW - match new messages
+OLD - match old messages
+RECENT - match messages with the \\RECENT flag set
+SEEN - match messages that have been read (the \\SEEN flag is set)
+UNANSWERED - match messages that have not been answered
+UNDELETED - match messages that are not deleted
+UNFLAGGED - match messages that are not flagged
+UNKEYWORD "string" - match messages that do not have the keyword "string"
+UNSEEN - match messages which have not been read yet
 ```
 
 ### awaiting results
