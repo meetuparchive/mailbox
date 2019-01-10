@@ -20,6 +20,9 @@ echo -n "apppassword" \
   subject:lotto since:1-jan-2019
 ```
 
+A non-0 exit code is yielded when there are no results. You can use this to detect if your
+search was successful or not.
+
 ### query filters
 
 Query filters expected in the form of `{name}:{value}` arguments. Multi-word values should be quoted.
@@ -39,6 +42,19 @@ SUBJECT "string" - match messages with "string" in the Subject:
 TEXT "string" - match messages with text "string"
 TO "string" - match messages with "string" in the To:
 UNKEYWORD "string" - match messages that do not have the keyword "string"
+```
+
+### awaiting results
+
+Sometimes email is worth waiting for, you can use the `-w` ( `--wait` ) option providing a
+duration to wait until messages that meet your query filter critera is met
+
+```sh
+echo -n "apppassword" \
+| cargo run -p mailbox-cli -- \
+  -u "you@gmail.com" \
+  -w 10s
+  subject:lotto since:1-jan-2019
 ```
 
 ### template output
