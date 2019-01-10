@@ -1,6 +1,6 @@
 # mailbox [![Build Status](https://travis-ci.com/meetup/mailbox.svg?branch=master)](https://travis-ci.com/meetup/mailbox)
 
-> ✉️ 💌 ✉️ imap query client that speaks json
+> ✉️ 💌 ✉️ [imap](https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol) query client that speaks json
 
 ## 👩‍🏭 development
 
