@@ -1,3 +1,7 @@
+#[cfg(test)]
+#[macro_use]
+extern crate pretty_assertions;
+
 use log::debug;
 use mailparse::{parse_mail, ParsedMail};
 use native_tls::TlsConnector;
@@ -20,7 +24,7 @@ pub struct Client {
 
 // http://www.xeams.com/difference-envelope-header.htm
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, PartialEq)]
 pub struct Message {
     pub headers: HashMap<String, String>,
     pub subject: Option<String>,
@@ -30,7 +34,7 @@ pub struct Message {
     pub body: Vec<Part>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, PartialEq)]
 pub struct Part {
     pub content_type: String,
     pub body: Option<String>,
@@ -142,12 +146,51 @@ impl Client {
 
 #[cfg(test)]
 mod tests {
-    use super::Client;
+    use super::{Client, Message, Part};
+    use maplit::hashmap;
+
     #[test]
     fn formats_query() {
         assert_eq!(
             Client::fmt_query(&[("foo".into(), "bar".into()), ("baz".into(), "".into())]),
             "foo bar baz"
+        )
+    }
+
+    #[test]
+    fn converts_messages() {
+        let message = Message::from(
+            mailparse::parse_mail(include_bytes!("../tests/data/sample.mail"))
+                .expect("failed to parse mail message"),
+        );
+
+        assert_eq!(
+            message,
+            Message {
+                headers: hashmap! {
+                    "Subject".to_string() => "This is a test email".to_string(),
+                    "Content-Type".to_string() => "multipart/alternative; boundary=foobar".to_string(),
+                    "Date".to_string() => "Sun, 02 Oct 2016 07:06:22 -0700 (PDT)".to_string()
+                },
+                subject: Some("This is a test email".into()),
+                to: None,
+                from: None,
+                date: Some("Sun, 02 Oct 2016 07:06:22 -0700 (PDT)".into()),
+                body: vec![
+                    Part {
+                        content_type: "text/plain".into(),
+                        body: Some(
+                            "This is the plaintext version, in utf-8. Proof by Euro: €".into()
+                        )
+                    },
+                    Part {
+                         content_type: "text/html".into(),
+                         body: Some(
+                            "<html><body>This is the <b>HTML</b> version, in us-ascii. Proof by Euro: &euro;</body></html>\n".into()
+                        )
+                    }
+                ]
+            }
         )
     }
 }
