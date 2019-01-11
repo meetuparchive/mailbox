@@ -8,8 +8,9 @@ sudo: required
 # https://docs.travis-ci.com/user/pull-requests/#how-pull-requests-are-built
 branches:
   only:
+  # release tags
+  - /^v\d+\.\d+\.\d+.*$/
   - master
-  - /v^\d+.\d+.\d+$/
 
 # Cache `cargo install`ed tools, but don't cache the project's `target`
 # directory (which ends up over-caching and filling all disk space!)
