@@ -36,7 +36,6 @@ DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
     file: mailbox-$TRAVIS_TAG-$OS-$ARCH.tar.gz
     skip_cleanup: true
     on:
-      branch: master
       tags: true
 
 matrix:
@@ -44,7 +43,7 @@ matrix:
 
   - name: Unit Tests
     env: RUST_BACKTRACE=1
-    rust: nightly
+    rust: nightly-2019-01-08
     script:
     - cargo test --locked
     - rustup component add rustfmt
@@ -85,13 +84,13 @@ addons:
     - libssl-dev
 
 install: |
-  if [ "$TRAVIS_RUST_VERSION" == nightly ] && [ $TRAVIS_BRANCH = master ]; then
+  if [ "$TRAVIS_RUST_VERSION" == nightly-2019-01-08 ] && [ $TRAVIS_BRANCH = master ]; then
     RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin -f
   fi
 after_success:
   # report coverage to coveralls
   # see https://github.com/xd009642/tarpaulin for more information
-  - '[ $TRAVIS_RUST_VERSION = nightly ] &&
+  - '[ $TRAVIS_RUST_VERSION = nightly-2019-01-08 ] &&
      [ $TRAVIS_BRANCH = master ] &&
      [ $TRAVIS_PULL_REQUEST = false ] &&
      cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID || true'
