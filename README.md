@@ -7,6 +7,18 @@
 This is a [rustlang](https://www.rust-lang.org/en-US/) application.
 Go grab yourself a copy with [rustup](https://rustup.rs/).
 
+## install
+
+### Github Releases
+
+You can download precompiled linux and osx binaries directly from [Github Releases](https://github.com/meetup/mailbox)
+
+```sh
+$ cd $HOME/bin
+curl -L "https://github.com/meetup/mailbox/releases/download/v0.0.0/mailbox-v0.0.0-$(uname -s)-$(uname -m).tar.gz" \
+  | tar-xz
+```
+
 ## 🤸 usage
 
 The default imap domain is Google's.
